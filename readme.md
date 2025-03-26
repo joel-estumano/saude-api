@@ -61,3 +61,8 @@ Laravel Framework 5.4.36
 $ php artisan migrate
 $ php artisan db:seed
 $ php artisan passport:install
+
+$ php artisan vendor:publish --tag=passport-config
+
+docker-compose build
+docker-compose up
