@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Regional;
 
-class RegionalController extends Controller
+class RegionaisController extends Controller
 {
     /**
      * Lista todos os registros de Regional.

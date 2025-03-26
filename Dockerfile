@@ -32,4 +32,6 @@ RUN chmod -R 775 storage bootstrap/cache
 EXPOSE 8000
 
 # Comando para rodar as migrações e seeds automaticamente antes de iniciar o servidor
-CMD bash -c "php artisan migrate --force --seed && php artisan passport:install --force && php artisan serve --host=0.0.0.0 --port=8000"
+# CMD bash -c "php artisan migrate --force --seed && php artisan passport:install --force && php artisan serve --host=0.0.0.0 --port=8000"
+
+CMD bash -c "php artisan migrate --force --seed && php artisan passport:install --force | tee passport_output.txt && php update_env.php && php artisan serve --host=0.0.0.0 --port=8000"
