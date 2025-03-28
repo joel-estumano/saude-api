@@ -52,14 +52,16 @@ class Handler extends ExceptionHandler
         // Verifica se a chamada é para API (baseado no prefixo /api)
         if ($request->is('api/*')) {
             // Determina o código de status
-            $status = $exception instanceof ValidationException
-                ? 400 // Bad Request para validação
-                : (method_exists($exception, 'getStatusCode') ? $exception->getStatusCode() : 500);
-        
-            // Mensagem de erro
-            $message = $exception instanceof ValidationException
-                ? $exception->validator->errors() // Detalhes de validação
-                : $exception->getMessage();
+            if ($exception instanceof AuthenticationException) {
+                $status = 401; // Código apropriado para "Não Autenticado"
+                $message = 'Unauthenticated'; // Mensagem padrão
+            } elseif ($exception instanceof ValidationException) {
+                $status = 400; // Bad Request para validação
+                $message = $exception->validator->errors(); // Detalhes de validação
+            } else {
+                $status = method_exists($exception, 'getStatusCode') ? $exception->getStatusCode() : 500;
+                $message = $exception->getMessage(); // Mensagem de erro geral
+            }
         
             // Retorno padronizado em JSON
             return response()->json([
@@ -71,7 +73,6 @@ class Handler extends ExceptionHandler
                 ],
             ], $status);
         }
-
         // Para chamadas não-API, mantém o comportamento padrão
         return parent::render($request, $exception);
     }

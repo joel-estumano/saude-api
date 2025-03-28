@@ -7,33 +7,53 @@ use App\Models\Entidade;
 
 class EntidadesController extends Controller
 {
-   
+
     public function store(Request $request)
     {
-        
-        $validatedData = $this->validate($request, [
-            'razao_social' => 'required|string|max:255',
-            'nome_fantasia' => 'required|string|max:255',
-            'cnpj' => 'required|string|max:18|unique:entidade,cnpj',
-            'regional_id' => 'required|exists:regional,uuid',
-            'data_inauguracao' => 'required|date',
-            'ativa' => 'required|boolean',
-            'especialidades' => 'required|array|min:5', 
-            'especialidades.*' => 'required|exists:especialidade,uuid', 
-        ]);
+        try {
+            // Validação dos dados
+            $this->validate($request, [
+                'razao_social' => 'required|string|max:255',
+                'nome_fantasia' => 'required|string|max:255',
+                'cnpj' => 'required|string|max:18|unique:entidades,cnpj',
+                'regional_id' => 'required|exists:regionais,uuid',
+                'data_inauguracao' => 'required|date',
+                'ativa' => 'required|boolean',
+                'especialidades' => 'required|array|min:5',
+                'especialidades.*' => 'required|exists:especialidades,uuid',
+            ]);
 
-        
-        $entidade = Entidade::create($validatedData);
+            // Acesse os dados validados diretamente no request
+            $entidadeData = $request->only([
+                'razao_social',
+                'nome_fantasia',
+                'cnpj',
+                'regional_id',
+                'data_inauguracao',
+                'ativa',
+            ]);
 
-        
-        $entidade->especialidades()->sync($validatedData['especialidades']);
+            // Cria a entidade
+            $entidade = Entidade::create($entidadeData);
 
-        return response()->json([
-            'message' => 'Entidade criada com sucesso!',
-            'data' => $entidade
-        ], 201);
+            // Sincronizar especialidades
+            if ($request->has('especialidades')) {
+                $entidade->especialidades()->sync($request->especialidades);
+            }
+
+            return response()->json([
+                'message' => 'Entidade criada com sucesso!',
+                'data' => $entidade->load('especialidades'),
+            ], 201);
+
+        } catch (\Exception $e) {
+            return response()->json([
+                'message' => 'Erro ao criar a entidade.',
+                'error' => $e->getMessage(),
+            ], 500);
+        }
     }
-
+   
     public function show($uuid)
     {
         
@@ -69,27 +89,45 @@ class EntidadesController extends Controller
     
     public function update(Request $request, $uuid)
     {
-       
-        $validatedData = $this->validate($request, [
-            'razao_social' => 'nullable|string|max:255',
-            'nome_fantasia' => 'nullable|string|max:255',
-            'cnpj' => 'nullable|string|max:18|unique:entidade,cnpj,' . $uuid . ',uuid',
-            'regional_id' => 'nullable|exists:regional,uuid',
-            'data_inauguracao' => 'nullable|date',
-            'ativa' => 'nullable|boolean',
-        ]);
+        try {
+            // Validação com ignorância de unicidade para o CNPJ da própria entidade
+            $validatedData = $this->validate($request, [
+                'razao_social' => 'nullable|string|max:255',
+                'nome_fantasia' => 'nullable|string|max:255',
+                'cnpj' => 'nullable|string|max:18|unique:entidades,cnpj,' . $uuid . ',uuid',
+                'regional_id' => 'nullable|exists:regionais,uuid',
+                'data_inauguracao' => 'nullable|date',
+                'ativa' => 'nullable|boolean',
+                'especialidades' => 'sometimes|array|min:5',
+                'especialidades.*' => 'required|exists:especialidades,uuid',
+            ]);
 
-        
-        $entidade = Entidade::findOrFail($uuid);
-        $entidade->update($request->all());
+            // Buscar a entidade pelo UUID
+            $entidade = Entidade::findOrFail($uuid);
 
-        return response()->json([
-            'message' => 'Entidade atualizada com sucesso!',
-            'data' => $entidade
-        ], 200);
+            // Atualizar os dados da entidade
+            $entidadeData = $validatedData;
+            unset($entidadeData['especialidades']); // Remove especialidades antes do update
+            $entidade->update($entidadeData);
+
+            // Sincronizar especialidades, se fornecidas
+            if ($request->has('especialidades')) {
+                $entidade->especialidades()->sync($validatedData['especialidades']);
+            }
+
+            return response()->json([
+                'message' => 'Entidade atualizada com sucesso!',
+                'data' => $entidade->load('especialidades'),
+            ], 200);
+
+        } catch (\Exception $e) {
+            return response()->json([
+                'message' => 'Erro ao atualizar a entidade.',
+                'error' => $e->getMessage(),
+            ], 500);
+        }
     }
 
-   
     public function destroy($uuid)
     {
         $entidade = Entidade::findOrFail($uuid);
