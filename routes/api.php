@@ -14,7 +14,20 @@ use Illuminate\Http\Request;
 */
 
 // Rotas públicas (sem autenticação necessária)
-Route::post('/login', 'AuthController@login');
+Route::post('login', '\Laravel\Passport\Http\Controllers\AccessTokenController@issueToken');
+Route::post('refresh', '\Laravel\Passport\Http\Controllers\AccessTokenController@issueToken');
+Route::get('logout', function (Request $request) {
+    $user = $request->user();
+
+    // Revogar todos os tokens emitidos para o usuário
+    foreach ($user->tokens as $token) {
+        $token->revoke();
+    }
+
+    return response()->json([
+        'message' => 'Todos os tokens foram revogados com sucesso!',
+    ]);
+})->middleware('auth:api');
 
 // Rotas protegidas por middleware auth:api
 Route::middleware(['auth:api'])->group(function () {
@@ -23,10 +36,6 @@ Route::middleware(['auth:api'])->group(function () {
     Route::get('/user', function (Request $request) {
         return $request->user();
     });
-
-    // Rotas para autenticação protegidas
-    Route::post('/logout', 'AuthController@logout');
-    Route::post('/refresh', 'AuthController@refresh');
 
     // Rotas para Regionais
     Route::get('regionais', 'RegionaisController@index');
