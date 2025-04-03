@@ -49,31 +49,34 @@ class Handler extends ExceptionHandler
      */
     public function render($request, Exception $exception)
     {
-        // Verifica se a chamada é para API (baseado no prefixo /api)
+        // Verifica se a requisição é para a API (baseado no prefixo /api)
         if ($request->is('api/*')) {
-            // Determina o código de status
+            // Define o status e a mensagem com base no tipo da exceção
             if ($exception instanceof AuthenticationException) {
-                $status = 401; // Código apropriado para "Não Autenticado"
+                $status = 401; // Código para "Não Autenticado"
                 $message = 'Unauthenticated'; // Mensagem padrão
             } elseif ($exception instanceof ValidationException) {
-                $status = 400; // Bad Request para validação
-                $message = $exception->validator->errors(); // Detalhes de validação
+                $status = 400; // Código para erro de validação
+                $message = $exception->validator->errors(); // Detalhes dos erros de validação
             } else {
-                $status = method_exists($exception, 'getStatusCode') ? $exception->getStatusCode() : 500;
+                $status = method_exists($exception, 'getStatusCode') 
+                    ? $exception->getStatusCode() 
+                    : 500; // Código padrão para erro interno
                 $message = $exception->getMessage(); // Mensagem de erro geral
             }
-        
-            // Retorno padronizado em JSON
+
+            // Retorna a resposta padronizada em JSON
             return response()->json([
                 'status' => $status,
-                'timestamp' => Carbon::now()->toIso8601String(),
-                'path' => $request->path(),
+                'timestamp' => Carbon::now()->toIso8601String(), // Timestamp no padrão ISO 8601
+                'path' => $request->path(), // Caminho da requisição
                 'error' => [
-                    'message' => $message,
+                    'message' => $message, // Mensagem de erro
                 ],
             ], $status);
         }
-        // Para chamadas não-API, mantém o comportamento padrão
+
+        // Chamada não-API: utiliza o comportamento padrão
         return parent::render($request, $exception);
     }
 
