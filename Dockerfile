@@ -31,7 +31,15 @@ RUN chmod -R 775 storage bootstrap/cache
 # Exponha a porta usada pelo Laravel
 EXPOSE 8000
 
-# Comando para rodar as migrações e seeds automaticamente antes de iniciar o servidor
-# CMD bash -c "php artisan migrate --force --seed && php artisan passport:install --force && php artisan serve --host=0.0.0.0 --port=8000"
-
-CMD bash -c "php artisan migrate --force --seed && php artisan passport:install --force | tee passport_output.txt && php update_env.php && php artisan serve --host=0.0.0.0 --port=8000"
+# Comando para executar apenas se as chaves de Passport não existirem
+CMD bash -c "php artisan migrate --force && php artisan db:seed --force && \
+if [ ! -f storage/oauth-private.key ]; then \
+    echo 'Passport ainda não configurado. Criando chaves...' && \
+    php artisan passport:install --force | tee passport_output.txt && \
+    echo 'Chaves criadas:' && \
+    cat passport_output.txt; \
+else \
+    echo 'Passport já está instalado. Exibindo as chaves existentes...' && \
+    cat passport_output.txt; \
+fi && \
+php artisan serve --host=0.0.0.0 --port=8000"
