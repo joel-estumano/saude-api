@@ -98,13 +98,13 @@ Popule o banco de dados com dados iniciais:
 
 ```bash
 php artisan db:seed
-
+```
 Você terá então um usuário padrão: 
 email: admin@mail.com
 password: admin123
 
 Utilize-o para fazer login no sistema cliente.
-```
+
 ### Geração de Chaves e Configurações
 
 Gere a chave de criptografia:
