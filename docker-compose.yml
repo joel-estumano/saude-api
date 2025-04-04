@@ -1,4 +1,3 @@
-version: "3.8"
 services:
   app:
     build:
@@ -24,7 +23,7 @@ services:
     depends_on:
       - db
   db:
-    image: mysql:8.0
+    image: mysql:5.7
     container_name: saude_db
     environment:
       MYSQL_ROOT_PASSWORD: root

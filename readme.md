@@ -107,7 +107,7 @@ Utilize-o para fazer login no sistema cliente.
 ```
 ### Geração de Chaves e Configurações
 
-Gere a chave de criptografia::
+Gere a chave de criptografia:
 
 ```bash
 php artisan key:generate
@@ -122,7 +122,7 @@ Configure os segredos de autenticação via OAuth:
 
 ```bash
 php artisan passport:install
-
+```
 Você terá então algo assim:
 
 Encryption keys generated successfully.
@@ -134,12 +134,108 @@ Client ID: 2
 Client Secret: xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
 Guarde essas informações, pois elas serão necessárias para autorizar o sistema cliente.
-```
+
 
 ### Execução do Projeto
 
 Inicie o servidor de desenvolvimento
 ```bash
 php artisan serve
-Acesse a aplicação no navegador usando o endereço: http://127.0.0.1:8000
 ```
+Acesse a aplicação no navegador usando o endereço: http://127.0.0.1:8000
+
+
+## Docker
+
+Clone o repositório:
+
+```bash
+git clone https://github.com/joel-estumano/saude-api.git
+```
+
+Navegue para o Diretório do Projeto:
+
+```bash
+cd saude-api
+```
+
+Instale as Dependências:
+
+```bash
+composer install
+```
+
+Copie o arquivo env.example para criar o arquivo .env na raiz do projeto:
+
+Execute:
+```bash
+docker-compose up --build
+```
+
+Acompanhe os logs para obter as informações dos segredos de autenticação via OAuth.
+
+Em seguida pode ocorrer:
+
+saude_api  |                                                                                                                                                  
+saude_api  |
+saude_api  |   [Illuminate\Database\QueryException]                                         
+saude_api  |   SQLSTATE[HY000] [2002] Connection refused (SQL: select * from information_s                                                                    
+saude_api  |   chema.tables where table_schema = saude-db and table_name = migrations)                                                                        
+saude_api  |                                                                                                                                                  
+saude_api  |                                                                                                                                                  
+saude_api  |                                                                                                                                                  
+saude_api  |   [PDOException]                             
+saude_api  |   SQLSTATE[HY000] [2002] Connection refused                                                                                                      
+saude_api  |                                                                                                                                                  
+saude_api  | 
+saude_api exited with code 1
+
+Então tente executar: 
+```bash
+docker-compose up
+```
+
+E acompanhe os logs para obter as informações dos segredos de autenticação via OAuth.
+
+Algo como:
+
+... \
+Migration table created successfully. \
+Migrating: 2014_10_12_000000_create_users_table \
+Migrated:  2014_10_12_000000_create_users_table \
+Migrating: 2014_10_12_100000_create_password_resets_table \
+Migrated:  2014_10_12_100000_create_password_resets_table \
+Migrating: 2016_06_01_000001_create_oauth_auth_codes_table \
+Migrated:  2016_06_01_000001_create_oauth_auth_codes_table \
+Migrating: 2016_06_01_000002_create_oauth_access_tokens_table \
+Migrated:  2016_06_01_000002_create_oauth_access_tokens_table \
+Migrating: 2016_06_01_000003_create_oauth_refresh_tokens_table \
+Migrated:  2016_06_01_000003_create_oauth_refresh_tokens_table \
+Migrating: 2016_06_01_000004_create_oauth_clients_table \
+Migrated:  2016_06_01_000004_create_oauth_clients_table \
+Migrating: 2016_06_01_000005_create_oauth_personal_access_clients_table \
+Migrated:  2016_06_01_000005_create_oauth_personal_access_clients_table \
+Migrating: 2025_03_26_170129_create_table_regionais \
+Migrated:  2025_03_26_170129_create_table_regionais \
+Migrating: 2025_03_26_170525_create_table_entidades \
+Migrated:  2025_03_26_170525_create_table_entidades \
+Migrating: 2025_03_26_170803_create_table_especialidades \
+Migrated:  2025_03_26_170803_create_table_especialidades \
+Migrating: 2025_03_26_170917_create_table_entidade_especialidades \
+Migrated:  2025_03_26_170917_create_table_entidade_especialidades \
+Migrating: 2025_03_28_013918_alter_table_add_especialidades_to_entidades \
+Migrated:  2025_03_28_013918_alter_table_add_especialidades_to_entidades \
+Seeding: UserSeeder \
+Seeding: RegionaisSeeder \
+Seeding: EspecialidadesSeeder \
+Passport ainda não configurado. Criando chaves...
+Encryption keys generated successfully. \
+Personal access client created successfully. \
+Client ID: 1 \
+Client Secret: xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx \
+Password grant client created successfully. \
+Client ID: 2 \
+Client Secret: xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx  \
+...
+
+Acesse a aplicação no navegador usando o endereço: http://127.0.0.1:8000
