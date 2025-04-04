@@ -125,13 +125,13 @@ php artisan passport:install
 ```
 Você terá então algo assim:
 
-Encryption keys generated successfully.
-Personal access client created successfully.
-Client ID: 1
-Client Secret: xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
-Password grant client created successfully.
-Client ID: 2
-Client Secret: xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+Encryption keys generated successfully. \
+Personal access client created successfully. \
+Client ID: 1 \
+Client Secret: xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx \
+Password grant client created successfully. \
+Client ID: 2 \
+Client Secret: xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx \
 
 Guarde essas informações, pois elas serão necessárias para autorizar o sistema cliente.
 
