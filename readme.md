@@ -52,8 +52,94 @@ The Laravel framework is open-sourced software licensed under the [MIT license](
 
 ## Versões
 
-Composer version 2.7.7
-PHP version 7.2.5
+Composer version 2.2.25
+PHP version 7.0.0
 Laravel Framework 5.4.36
 
-## Comandos
+## Instalação
+
+Clone o repositório:
+
+```bash
+git clone https://github.com/joel-estumano/saude-api.git
+```
+
+Navegue para o Diretório do Projeto:
+
+```bash
+cd saude-api
+```
+
+Instale as Dependências:
+
+```bash
+composer install
+```
+
+### Base de dados:
+
+Você deve ter instalado o servidor SQL na versão 5.7.11
+(mysql-installer-community-5.7.11.0.msi) -> https://downloads.mysql.com/archives/installer/
+
+O seu banco de dados deve ter um eschema com esse nome: saude-db
+
+### Configuração do Ambiente
+Copie o arquivo `env.example` para criar o arquivo `.env` na raiz do projeto:
+
+### Migrações e População do Banco de Dados
+
+Execute as Migrações:
+
+```bash
+php artisan migrate
+```
+
+Popule o banco de dados com dados iniciais:
+
+```bash
+php artisan db:seed
+
+Você terá então um usuário padrão: 
+email: admin@mail.com
+password: admin123
+
+Utilize-o para fazer login no sistema cliente.
+```
+### Geração de Chaves e Configurações
+
+Gere a chave de criptografia::
+
+```bash
+php artisan key:generate
+```
+Publique os recursos do sistema:
+
+```bash
+php artisan vendor:publish
+```
+
+Configure os segredos de autenticação via OAuth:
+
+```bash
+php artisan passport:install
+
+Você terá então algo assim:
+
+Encryption keys generated successfully.
+Personal access client created successfully.
+Client ID: 1
+Client Secret: xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+Password grant client created successfully.
+Client ID: 2
+Client Secret: xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+
+Guarde essas informações, pois elas serão necessárias para autorizar o sistema cliente.
+```
+
+### Execução do Projeto
+
+Inicie o servidor de desenvolvimento
+```bash
+php artisan serve
+Acesse a aplicação no navegador usando o endereço: http://127.0.0.1:8000
+```
