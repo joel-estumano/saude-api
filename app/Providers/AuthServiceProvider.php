@@ -35,10 +35,10 @@ class AuthServiceProvider extends ServiceProvider
         // Registra as rotas necessárias para a autenticação OAuth2 com o Passport
         Passport::routes();
 
-        // Define a expiração dos tokens de acesso em 15 dias
-        Passport::tokensExpireIn(Carbon::now()->addDays(15));
+        // Define a expiração dos tokens de acesso para 30 minutos a partir do momento em que são gerados
+        Passport::tokensExpireIn(Carbon::now()->addMinutes(30));
 
-        // Define a expiração dos tokens de atualização em 30 dias
-        Passport::refreshTokensExpireIn(Carbon::now()->addDays(30));
+        // Define a expiração dos tokens de atualização apenas 1 dia
+        Passport::refreshTokensExpireIn(Carbon::now()->addDay());
     }
 }
