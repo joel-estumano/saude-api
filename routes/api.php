@@ -14,9 +14,12 @@ use Illuminate\Http\Request;
 */
 
 // Rotas públicas (sem autenticação necessária)
-Route::post('login', 'AuthController@login'); // Route::post('login', '\Laravel\Passport\Http\Controllers\AccessTokenController@issueToken');
 
-Route::post('refresh', '\Laravel\Passport\Http\Controllers\AccessTokenController@issueToken');
+// Route::post('login', '\Laravel\Passport\Http\Controllers\AccessTokenController@issueToken');
+// Route::post('refresh', '\Laravel\Passport\Http\Controllers\AccessTokenController@issueToken');
+
+Route::post('login', 'AuthController@login');
+Route::post('refresh', 'AuthController@refreshToken'); 
 
 Route::get('logout', function (Request $request) {
     $user = $request->user();
