@@ -89,8 +89,6 @@ O seu banco de dados local deve ter um eschema com esse nome `saude-db`
 #### Na raiz do projeto:
 - Copie e cole o arquivo `env.example` e renomeie o arquivo copiado para `.env`.
 
-- Crie o arquivo `passport_output.txt`
-
 ### Migrações e População do Banco de Dados
 
 Execute as Migrações:
