@@ -78,13 +78,18 @@ composer install
 
 ### Base de dados:
 
-Você deve ter instalado o servidor SQL na versão 5.7.11
-(mysql-installer-community-5.7.11.0.msi) -> https://downloads.mysql.com/archives/installer/
+*Você deve ter instalado o servidor SQL na versão 5.7.11*
 
-O seu banco de dados deve ter um eschema com esse nome: saude-db
+O servidor SQL pode ser obtido aqui: https://downloads.mysql.com/archives/installer/ `(mysql-installer-community-5.7.11.0.msi)` 
+
+O seu banco de dados local deve ter um eschema com esse nome `saude-db`
 
 ### Configuração do Ambiente
-Copie o arquivo `env.example` para criar o arquivo `.env` na raiz do projeto:
+
+#### Na raiz do projeto:
+- Copie e cole o arquivo `env.example` e renomeie o arquivo copiado para `.env`.
+
+- Crie o arquivo `passport_output.txt`
 
 ### Migrações e População do Banco de Dados
 
@@ -99,11 +104,6 @@ Popule o banco de dados com dados iniciais:
 ```bash
 php artisan db:seed
 ```
-Você terá então um usuário padrão: 
-email: admin@mail.com
-password: admin123
-
-Utilize-o para fazer login no sistema cliente.
 
 ### Geração de Chaves e Configurações
 
@@ -118,12 +118,11 @@ Publique os recursos do sistema:
 php artisan vendor:publish
 ```
 
-Configure os segredos de autenticação via OAuth:
+Configure os segredos de autenticação via OAuth: `Password grant client`.
 
-```bash
-php artisan passport:install
-```
-Você terá então algo assim:
+#### Fique de olho no console!
+
+Você terá uma sída como:
 
 Encryption keys generated successfully. \
 Personal access client created successfully. \
@@ -131,19 +130,36 @@ Client ID: 1 \
 Client Secret: xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx \
 Password grant client created successfully. \
 Client ID: 2 \
-Client Secret: xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx \
+Client Secret: xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx 
 
 Guarde essas informações, pois elas serão necessárias para autorizar o sistema cliente.
 
+#### Password grant client.
+- `clientId` <- Client ID: 2
+-  `clientSecret` <- Client Secret: xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+
+Execute: 
+```bash
+php artisan passport:install
+```
 
 ### Execução do Projeto
 
-Inicie o servidor de desenvolvimento
+Inicie o servidor de desenvolvimento:
 ```bash
 php artisan serve
 ```
-Acesse a aplicação no navegador usando o endereço: http://127.0.0.1:8000
+Acesse a aplicação no navegador usando o endereço: http://127.0.0.1:8000.
 
+#### Para acessar o sistema, utilize o e-mail e senha:
+
+```bash
+admin@mail.com
+```
+
+```bash
+admin123
+```
 
 ## Docker
 
@@ -165,14 +181,30 @@ Instale as Dependências:
 composer install
 ```
 
-Copie o arquivo env.example para criar o arquivo .env na raiz do projeto:
+### Configuração do Ambiente
+
+#### Na raiz do projeto:
+- Copie e cole o arquivo `env.example` e renomeie o arquivo copiado para `.env`.
+
+- Crie o arquivo `passport_output.txt`
 
 Execute:
 ```bash
 docker-compose up --build
 ```
 
-Acompanhe os logs para obter as informações dos segredos de autenticação via OAuth.
+Acompanhe os logs para obter as informações dos segredos de autenticação via OAuth: 
+`Password grant client`
+
+Encryption keys generated successfully. \
+Personal access client created successfully. \
+Client ID: 1 \
+Client Secret: xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx \
+Password grant client created successfully. \
+Client ID: 2 \
+Client Secret: xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx 
+
+*Guarde essas informações, pois elas serão necessárias para autorizar o sistema cliente.*
 
 Em seguida pode ocorrer:
 
@@ -195,47 +227,29 @@ Então tente executar:
 docker-compose up
 ```
 
-E acompanhe os logs para obter as informações dos segredos de autenticação via OAuth.
+E acompanhe os logs para obter as informações dos segredos de autenticação via OAuth: 
+`Password grant client`
 
-Algo como:
-
-... \
-Migration table created successfully. \
-Migrating: 2014_10_12_000000_create_users_table \
-Migrated:  2014_10_12_000000_create_users_table \
-Migrating: 2014_10_12_100000_create_password_resets_table \
-Migrated:  2014_10_12_100000_create_password_resets_table \
-Migrating: 2016_06_01_000001_create_oauth_auth_codes_table \
-Migrated:  2016_06_01_000001_create_oauth_auth_codes_table \
-Migrating: 2016_06_01_000002_create_oauth_access_tokens_table \
-Migrated:  2016_06_01_000002_create_oauth_access_tokens_table \
-Migrating: 2016_06_01_000003_create_oauth_refresh_tokens_table \
-Migrated:  2016_06_01_000003_create_oauth_refresh_tokens_table \
-Migrating: 2016_06_01_000004_create_oauth_clients_table \
-Migrated:  2016_06_01_000004_create_oauth_clients_table \
-Migrating: 2016_06_01_000005_create_oauth_personal_access_clients_table \
-Migrated:  2016_06_01_000005_create_oauth_personal_access_clients_table \
-Migrating: 2025_03_26_170129_create_table_regionais \
-Migrated:  2025_03_26_170129_create_table_regionais \
-Migrating: 2025_03_26_170525_create_table_entidades \
-Migrated:  2025_03_26_170525_create_table_entidades \
-Migrating: 2025_03_26_170803_create_table_especialidades \
-Migrated:  2025_03_26_170803_create_table_especialidades \
-Migrating: 2025_03_26_170917_create_table_entidade_especialidades \
-Migrated:  2025_03_26_170917_create_table_entidade_especialidades \
-Migrating: 2025_03_28_013918_alter_table_add_especialidades_to_entidades \
-Migrated:  2025_03_28_013918_alter_table_add_especialidades_to_entidades \
-Seeding: UserSeeder \
-Seeding: RegionaisSeeder \
-Seeding: EspecialidadesSeeder \
-Passport ainda não configurado. Criando chaves...
 Encryption keys generated successfully. \
 Personal access client created successfully. \
 Client ID: 1 \
 Client Secret: xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx \
 Password grant client created successfully. \
 Client ID: 2 \
-Client Secret: xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx  \
-...
+Client Secret: xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx 
 
-Acesse a aplicação no navegador usando o endereço: http://127.0.0.1:8000
+*Guarde essas informações, pois elas serão necessárias para autorizar o sistema cliente.*
+
+### Acesso ao servidor
+
+No navegador, acesse o endereço: http://127.0.0.1:8000.
+
+#### Para acessar o sistema, utilize o e-mail e senha:
+
+```bash
+admin@mail.com
+```
+
+```bash
+admin123
+```

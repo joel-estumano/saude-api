@@ -36,7 +36,7 @@ class AuthServiceProvider extends ServiceProvider
         Passport::routes();
 
         // Define a expiração dos tokens de acesso para 30 minutos a partir do momento em que são gerados
-        Passport::tokensExpireIn(Carbon::now()->addMinutes(30));
+        Passport::tokensExpireIn(Carbon::now()->addMinutes(1));
 
         // Define a expiração dos tokens de atualização apenas 1 dia
         Passport::refreshTokensExpireIn(Carbon::now()->addDay());
